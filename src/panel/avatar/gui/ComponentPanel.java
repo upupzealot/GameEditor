@@ -11,13 +11,10 @@ import panel.avatar.core.DataBranch;
 
 @SuppressWarnings("serial")
 public class ComponentPanel extends JPanel{
-	
-	private String name;
 	private ButtonGroup button_group = new ButtonGroup();
 	
 	private FlowLayout layout = new FlowLayout(FlowLayout.LEFT);
-	public ComponentPanel(String name){
-		this.name = name;
+	public ComponentPanel(){
 		setLayout(layout);
 		//setPreferredSize(new Dimension(400, getPreferredSize().height));
 	}
@@ -27,7 +24,7 @@ public class ComponentPanel extends JPanel{
 		removeAll();
 		
 		for(int i = branch.size() - 1; i >= 0; i--) {
-			JToggleButton button = new ComponentButton(name, branch.get(i), this);
+			JToggleButton button = new ComponentButton(branch, branch.get(i), this);
 			
 			if(branch.get(i).getName().equals(selected_leaf_name)) {
 				button.setSelected(true);
@@ -35,6 +32,7 @@ public class ComponentPanel extends JPanel{
 			add(button);
 			button_group.add(button);
 		}
+		repaint();
 	}
 	
 	private String selected_leaf_name = null;

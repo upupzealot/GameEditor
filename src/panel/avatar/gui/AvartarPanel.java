@@ -41,15 +41,15 @@ public class AvartarPanel extends JPanel{
 	
     public JTabbedPane tabs;
 	private AvartarPanel() {
-		//DataTree data = new DataTree(new File(CommonData.CURRENT_PATH + "/res/"));
-		File PSDFile = new File(Preferences.userNodeForPackage(getClass()).get("LastOpen", CommonData.CURRENT_PATH + "/res/Avatar.psd"));
+		//File PSDFile = new File(Preferences.userNodeForPackage(getClass()).get("LastOpen", CommonData.CURRENT_PATH + "/res/Avatar.psd"));
+		File ResFolder = new File(Preferences.userNodeForPackage(getClass()).get("LastOpen", CommonData.CURRENT_PATH + "/res"));
 		try {
-			SharedDataCore = new DataCore(PSDFile);
+			SharedDataCore = new DataCore(ResFolder);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setWatchingPSD(PSDFile);
+		//setWatchingPSD(PSDFile);
 		
 		setLayout(new BorderLayout());
 		JPanel panel = new JPanel();
@@ -62,7 +62,7 @@ public class AvartarPanel extends JPanel{
 		
 		BufferedImage icon = null;
 		try {
-			Body_Panel = new ComponentPanel("body");
+			Body_Panel = new ComponentPanel();
 			icon = ImageIO.read(getClass().getResourceAsStream("/res/body.png"));
 			JScrollPane sp = new JScrollPane(Body_Panel);
 			sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -72,15 +72,15 @@ public class AvartarPanel extends JPanel{
 			tabs.addTab("肤色", new ImageIcon(icon), Body_Panel);
 			//tabs.addTab("肤色", Body_Panel);
 			
-			Face_Panel = new ComponentPanel("face gear");
+			Face_Panel = new ComponentPanel();
 			icon = ImageIO.read(getClass().getResourceAsStream("/res/face gear.png"));
 			tabs.addTab("面部", new ImageIcon(icon), Face_Panel);
 			//tabs.addTab("面部", Face_Panel);
-			Hair_Panel = new ComponentPanel("hair");
+			Hair_Panel = new ComponentPanel();
 			icon = ImageIO.read(getClass().getResourceAsStream("/res/hair.png"));
 			tabs.addTab("发型", new ImageIcon(icon), Hair_Panel);
 			//tabs.addTab("发型", Hair_Panel);
-			Clothes_Panel = new ComponentPanel("clothes");
+			Clothes_Panel = new ComponentPanel();
 			icon = ImageIO.read(getClass().getResourceAsStream("/res/clothes.png"));
 			tabs.addTab("服饰", new ImageIcon(icon), Clothes_Panel);
 			//tabs.addTab("服饰", Clothes_Panel);
@@ -109,6 +109,16 @@ public class AvartarPanel extends JPanel{
 		Face_Panel.setImages(data.get("face gear"));
 		Hair_Panel.setImages(data.get("hair"));
 		Clothes_Panel.setImages(data.get("clothes"));
+	}
+	
+	public void importDataCore(DataCore data) throws IOException {
+		SharedDataCore.importData(data);
+		
+		//System.out.println(SharedDataCore.get("body").size());
+		Body_Panel.setImages(SharedDataCore.get("body"));
+		Face_Panel.setImages(SharedDataCore.get("face gear"));
+		Hair_Panel.setImages(SharedDataCore.get("hair"));
+		Clothes_Panel.setImages(SharedDataCore.get("clothes"));
 	}
 	
 	private File watch_file = null;

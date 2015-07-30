@@ -19,6 +19,14 @@ public class DataBranch extends ArrayList<DataLeaf>{
 		return null;
 	}
 	
+	public void replaceLeaf(String leaf_name, DataLeaf new_leaf) {
+		for (DataLeaf leaf : this) {
+			if(leaf.getName().equals(leaf_name)) {
+				set(indexOf(leaf), new_leaf);
+			}
+		}
+	}
+	
 	public BufferedImage getLeafImage(String leaf_name) {
 		for (DataLeaf leaf : this) {
 			if(leaf.getName().equals(leaf_name)) {

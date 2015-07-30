@@ -57,6 +57,33 @@ public class DataCore extends DataTree{
 		}
 	}
 	
+	public void CheckMatch(DataCore another) throws IOException {
+		if(this.getWidth() != another.getWidth() || this.getHeight() != another.getHeight()) {
+			throw new IOException("Í¼ÏñµÄ³ß´ç²»Æ¥Åä");
+		}
+	}
+	
+	public void importData(DataCore another) throws IOException {
+		CheckMatch(another);
+		
+		for (String branch_name : LayerNames) {
+			DataBranch this_branch = get(branch_name);
+			DataBranch other_branch = another.get(branch_name);
+			System.out.print(branch_name+":");
+			System.out.println(this_branch.size());
+			for (DataLeaf other_leaf : other_branch) {
+				if(this_branch.getLeaf(other_leaf.getName()) == null) {
+					this_branch.add(other_leaf);
+					//System.out.println("add " + other_leaf.getName());
+				} else {
+					this_branch.replaceLeaf(other_leaf.getName(), other_leaf);
+					//System.out.println("replace " + other_leaf.getName());
+				}
+			}
+			System.out.println(this_branch.size());
+		}
+	}
+	
 	public BufferedImage getBranchLeaf(String branch_name, String leaf_name) {
 		return get(branch_name).getLeafImage(leaf_name);
 	}

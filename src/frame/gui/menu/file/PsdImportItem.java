@@ -2,22 +2,25 @@ package frame.gui.menu.file;
 
 import java.io.File;
 import java.io.IOException;
+
+import panel.avatar.core.DataCore;
 import panel.avatar.gui.AvartarPanel;
-import frame.core.io.FolderOpener;
+import frame.core.io.PsdOpener;
 import frame.gui.menu.MenuItem;
 
 @SuppressWarnings("serial")
-public class OpenItem extends MenuItem {
-	public OpenItem() {
-		super("打开", "control O");
+public class PsdImportItem extends MenuItem{
+	public PsdImportItem() {
+		super("从PSD导入", null);
 	}
 	
 	@Override
 	public void actionPerformed() {
-		File selected_folder = FolderOpener.OpenFolder();
-		if(selected_folder != null) {
+		File selected_file = PsdOpener.OpenPsd();
+		if(selected_file != null) {
 			try {
-				AvartarPanel.getInstance().setDataFile(selected_folder);
+				DataCore data = new DataCore(selected_file);
+				AvartarPanel.getInstance().importDataCore(data);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
