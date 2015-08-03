@@ -15,8 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+
 import panel.CommonData;
+import panel.avatar.core.DataBranch;
 import panel.avatar.core.DataCore;
+import panel.avatar.core.DataLeaf;
+import frame.core.io.PngSaver;
 import frame.gui.window.MainFrame;
 
 @SuppressWarnings("serial")
@@ -114,11 +118,24 @@ public class AvartarPanel extends JPanel{
 	public void importDataCore(DataCore data) throws IOException {
 		SharedDataCore.importData(data);
 		
-		//System.out.println(SharedDataCore.get("body").size());
 		Body_Panel.setImages(SharedDataCore.get("body"));
 		Face_Panel.setImages(SharedDataCore.get("face gear"));
 		Hair_Panel.setImages(SharedDataCore.get("hair"));
 		Clothes_Panel.setImages(SharedDataCore.get("clothes"));
+	}
+	
+	public void exportDataCore(File root_folder) {
+		if(!root_folder.isDirectory()) {
+			throw new RuntimeException("必须导出到一个目录");
+		}
+		for (String branch_name : SharedDataCore.LayerNames) {
+			DataBranch branch = SharedDataCore.get(branch_name);
+			for (DataLeaf leaf : branch) {
+				File output = new File(root_folder.getAbsolutePath() + "/" + branch_name + "/" + leaf.getName() + ".png");
+				output.mkdirs();
+				PngSaver.SaveImage(leaf.getImage(), output);
+			}
+		}
 	}
 	
 	private File watch_file = null;

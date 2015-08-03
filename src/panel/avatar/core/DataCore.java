@@ -69,8 +69,8 @@ public class DataCore extends DataTree{
 		for (String branch_name : LayerNames) {
 			DataBranch this_branch = get(branch_name);
 			DataBranch other_branch = another.get(branch_name);
-			System.out.print(branch_name+":");
-			System.out.println(this_branch.size());
+			//System.out.print(branch_name+":");
+			//System.out.println(this_branch.size());
 			for (DataLeaf other_leaf : other_branch) {
 				if(this_branch.getLeaf(other_leaf.getName()) == null) {
 					this_branch.add(other_leaf);
@@ -80,7 +80,7 @@ public class DataCore extends DataTree{
 					//System.out.println("replace " + other_leaf.getName());
 				}
 			}
-			System.out.println(this_branch.size());
+			//System.out.println(this_branch.size());
 		}
 	}
 	

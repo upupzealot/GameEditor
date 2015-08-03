@@ -7,7 +7,7 @@ import frame.gui.menu.MenuItem;
 @SuppressWarnings("serial")
 public class SaveItem extends MenuItem{
 	public SaveItem() {
-		super("¡Ì¥Ê",  "control S");
+		super("¡Ì¥Êµ±«∞ÕºœÒ",  "control S");
 	}
 	
 	@Override

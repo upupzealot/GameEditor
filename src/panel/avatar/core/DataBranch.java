@@ -1,7 +1,10 @@
 package panel.avatar.core;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
+
+import frame.core.io.PngSaver;
 
 @SuppressWarnings("serial")
 public class DataBranch extends ArrayList<DataLeaf>{
@@ -23,6 +26,11 @@ public class DataBranch extends ArrayList<DataLeaf>{
 		for (DataLeaf leaf : this) {
 			if(leaf.getName().equals(leaf_name)) {
 				set(indexOf(leaf), new_leaf);
+				
+				File file = leaf.getFile();
+				if(file != null) {
+					PngSaver.SaveImage(leaf.getImage(), file);
+				}
 			}
 		}
 	}

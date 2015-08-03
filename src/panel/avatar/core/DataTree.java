@@ -84,7 +84,7 @@ public class DataTree extends HashMap<String, DataBranch>{
 					if(file.isFile() && file.getPath().toLowerCase().endsWith(".png")) {
 						String name = file.getName().substring(0, file.getName().length() - 4);
 						print("--" + name);
-						get(group_name).add(new DataLeaf(name, ImageIO.read(file)));
+						get(group_name).add(new DataLeaf(name, ImageIO.read(file), file));
 					}
 				}
 			}

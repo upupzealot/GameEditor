@@ -38,19 +38,20 @@ public class PngSaver extends Saver{
         	}
         	
     		Preferences.userNodeForPackage(Saver.class).put("LastSave", folder);
-        	
-        	//long tm = System.nanoTime();
-        	try {
-				
-        		File output = new File(folder + "/" + file_name);
-        		
-        		ImageIO.write(image, "png", output);
-        		//System.out.println(folder);
-				//System.out.println((System.nanoTime() - tm) / 1000000 + "ms");
-			} catch (IOException e) {
-				//TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        	SaveImage(image, selected_file);
         }
+	}
+	
+	public static void SaveImage(BufferedImage image, File file) {
+    	String folder = file.getParent();
+    	String file_name = file.getName();
+
+    	try {
+    		File output = new File(folder + "/" + file_name);
+    		ImageIO.write(image, "png", output);
+		} catch (IOException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

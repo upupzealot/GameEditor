@@ -12,7 +12,8 @@ import panel.CommonData;
 
 @SuppressWarnings("serial")
 public class ZoomBox extends JComboBox<ZoomBox.ZoomItem>{
-	public static final Integer[] ZOOMS = {1, 2, 3, 4, 5, 6, 7, 8};
+	//public static final Integer[] ZOOMS = {1, 2, 3, 4, 5, 6, 7, 8};
+	public static final Integer[] ZOOMS = {1, 2, 4, 8};
 	
 	private static ZoomBox instance = null;
 	public static ZoomBox getInstance() {

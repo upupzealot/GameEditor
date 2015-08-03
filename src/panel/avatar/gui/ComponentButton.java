@@ -8,10 +8,10 @@ import java.awt.event.MouseListener;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
 
-import frame.core.io.PngSaver;
-import frame.gui.menu.MenuItem;
 import panel.avatar.core.DataBranch;
 import panel.avatar.core.DataLeaf;
+import frame.core.io.PngSaver;
+import frame.gui.menu.MenuItem;
 
 @SuppressWarnings("serial")
 public class ComponentButton extends JToggleButton{
@@ -83,6 +83,15 @@ public class ComponentButton extends JToggleButton{
 			@Override
 			public void actionPerformed() {
 				PngSaver.SaveImage(leaf.getImage());
+			}
+		});
+		popupmenu.add(new MenuItem("É¾³ý", "D") {
+			@Override
+			public void actionPerformed() {
+				System.out.println("delete");
+				leaf.getFile().delete();
+				branch.remove(leaf);
+				parent.remove(ComponentButton.this);
 			}
 		});
 		popupmenu.show(this, getWidth() / 2, getHeight() / 2);

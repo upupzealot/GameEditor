@@ -9,18 +9,11 @@ public class FileMenu extends JMenu{
 		super("нд╪Ч");
 		
 		add(new OpenItem());
-		
-		add(new JSeparator());
-		
-		add(new PsdImportItem());
 		add(new FolderImportItem());
 		
 		add(new JSeparator());
 		
 		add(new SaveItem());
-		
-		add(new JSeparator());
-		
 		add(new FolderExportItem());
 	}
 }
