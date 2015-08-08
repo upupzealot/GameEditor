@@ -9,7 +9,7 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 @SuppressWarnings("serial")
-abstract class StandaloneFrame extends JFrame {
+public abstract class StandaloneFrame extends JFrame {
     protected StandaloneFrame() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");

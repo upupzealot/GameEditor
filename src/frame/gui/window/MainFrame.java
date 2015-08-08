@@ -3,7 +3,6 @@ package frame.gui.window;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,22 +12,25 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.skin.DustSkin;
-import org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel;
-
-import panel.CommonData;
-import panel.avatar.gui.AvartarPanel;
-import frame.gui.menu.MenuBar;
 
 @SuppressWarnings("serial")
 public class MainFrame extends StandaloneFrame{
 	private static MainFrame instance = null;
+	private static boolean initing = false;
     public static MainFrame getInstance() {
     	if(instance == null) {
-    		instance = new MainFrame();    
-    		instance.setAlwaysOnTop(true);
+    		if(!initing) {
+    			initing = true;
+    			instance = new MainFrame(); 
+        		initing = false;
+    		}
+    		//instance.setAlwaysOnTop(true);
     	}
     	return instance;
+    }
+    
+    public static boolean isIniting() {
+    	return initing;
     }
     
     public static void main(String[] args) {
@@ -38,11 +40,13 @@ public class MainFrame extends StandaloneFrame{
     	java.awt.EventQueue.invokeLater(new Runnable() {
     		public void run() {
     			getInstance();
-    	        
     			///*
     			try {
-    				UIManager.setLookAndFeel(new SubstanceDustLookAndFeel());
-    				SubstanceLookAndFeel.setSkin(new DustSkin());
+    				String LookAndFeelName = "Dust";
+    				//String LookAndFeelName = "Twilight";
+    				UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.Substance" + LookAndFeelName + "LookAndFeel");
+    				SubstanceLookAndFeel.setSkin("org.pushingpixels.substance.api.skin." + LookAndFeelName + "Skin");
+    				//System.err.close();
     				
     				getInstance().pack();
     				MakeCenter(getInstance());
@@ -54,16 +58,25 @@ public class MainFrame extends StandaloneFrame{
     				// TODO Auto-generated catch block
     				e.printStackTrace();
     			}
-    			//*/
+    			catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     		}
     	});
     }
 
 	@Override
 	protected void Layout() {
-		setTitle("Ö½ÍÞÍÞ±à¼­Æ÷");
+		setTitle("ÎäÆ÷±à¼­Æ÷");
 		try {
-			BufferedImage img0 = ImageIO.read(new File(CommonData.CURRENT_PATH + "/res/Icon.png"));
+			BufferedImage img0 = ImageIO.read(getClass().getResourceAsStream("/res/Icon.png"));
 			Image img1 = img0.getScaledInstance(32, 32, Image.SCALE_FAST);
 			Image img2 = img0.getScaledInstance(64, 64, Image.SCALE_FAST);
 			Image img3 = img0.getScaledInstance(128, 128, Image.SCALE_FAST);
@@ -79,10 +92,17 @@ public class MainFrame extends StandaloneFrame{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setJMenuBar(new MenuBar());
 		
-		setLayout(new BorderLayout());
-		add(AvartarPanel.getInstance(), BorderLayout.CENTER);
+		//setJMenuBar(new frame.gui.menu.MenuBar());
+		//setLayout(new BorderLayout());
+		//add(panel.avatar.gui.AvartarPanel.getInstance(), BorderLayout.CENTER);
+		
+		//add(new panel.importer.gui.ImportPanel(), BorderLayout.CENTER);
+		//setResizable(false);
+		
+		add(panel.weapon.gui.WeaponPanel.getInstance(), BorderLayout.CENTER);
+		
+		//add(panel.map.gui.MapPanel.getInstance(), BorderLayout.CENTER);
 		
 		//RSyntaxTextArea codeArea = new CodeArea();
 		//RTextScrollPane scrollPane = new RTextScrollPane(codeArea);

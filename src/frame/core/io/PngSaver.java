@@ -45,6 +45,9 @@ public class PngSaver extends Saver{
 	public static void SaveImage(BufferedImage image, File file) {
     	String folder = file.getParent();
     	String file_name = file.getName();
+    	if(!file_name.toLowerCase().endsWith(".png")) {
+    		file_name += ".png";
+    	}
 
     	try {
     		File output = new File(folder + "/" + file_name);

@@ -46,7 +46,7 @@ public class AvartarPanel extends JPanel{
     public JTabbedPane tabs;
 	private AvartarPanel() {
 		//File PSDFile = new File(Preferences.userNodeForPackage(getClass()).get("LastOpen", CommonData.CURRENT_PATH + "/res/Avatar.psd"));
-		File ResFolder = new File(Preferences.userNodeForPackage(getClass()).get("LastOpen", CommonData.CURRENT_PATH + "/res"));
+		File ResFolder = new File(Preferences.userNodeForPackage(getClass()).get("LastOpen", CommonData.CURRENT_PATH + "/res/avatar"));
 		try {
 			SharedDataCore = new DataCore(ResFolder);
 		} catch (IOException e) {

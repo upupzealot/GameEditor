@@ -1,4 +1,4 @@
-package panel.avatar.gui;
+package panel.gui;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -6,9 +6,9 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.Icon;
 
-public class PreviewIcon implements Icon{
+public class DoubleIcon implements Icon{
 	private BufferedImage image;
-	public PreviewIcon(BufferedImage image) {
+	public DoubleIcon(BufferedImage image) {
 		this.image = image;
 	}
 	@Override

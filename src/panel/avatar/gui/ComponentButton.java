@@ -10,6 +10,7 @@ import javax.swing.JToggleButton;
 
 import panel.avatar.core.DataBranch;
 import panel.avatar.core.DataLeaf;
+import panel.gui.DoubleIcon;
 import frame.core.io.PngSaver;
 import frame.gui.menu.MenuItem;
 
@@ -19,7 +20,7 @@ public class ComponentButton extends JToggleButton{
 	private DataBranch branch;
 	private ComponentPanel parent;
 	public ComponentButton(DataBranch branch, DataLeaf leaf, ComponentPanel parent) {
-		super(new PreviewIcon(leaf.getImage().getSubimage(0, 0, leaf.getWidth() / 4, leaf.getHeight() / 4)));
+		super(new DoubleIcon(leaf.getImage().getSubimage(0, 0, leaf.getWidth() / 4, leaf.getHeight() / 4)));
 		this.branch = branch;
 		this.leaf = leaf;
 		this.parent = parent;
