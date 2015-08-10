@@ -4,9 +4,11 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JFileChooser;
+
 import panel.CommonData;
 import panel.QuickButton;
-import panel.weapon.core.WeaponData;
+import panel.weapon.gui.dialog.WeaponDataImportDialog;
 import frame.core.io.PngOpener;
 import frame.gui.window.MainFrame;
 
@@ -22,9 +24,11 @@ public class OpenButton extends QuickButton{
 		File selected_file = PngOpener.OpenPng(new File(CommonData.CURRENT_PATH + "/res/avatar/weapon"));
 		if(selected_file != null) {
 			try {
-				WeaponData data = new WeaponData(selected_file);
-				//new AnimateData(selected_file);
-				WeaponPanel.setSharedWeaponData(data);
+				WeaponDataImportDialog dialog = new WeaponDataImportDialog(selected_file);
+				int result = dialog.showImportDialog();
+				if(result == JFileChooser.APPROVE_OPTION) {
+					WeaponPanel.setSharedWeaponData(dialog.getWeaponData());
+				}
 
 				MainFrame.getInstance().setMinimumSize(new Dimension());
 				MainFrame.getInstance().pack();

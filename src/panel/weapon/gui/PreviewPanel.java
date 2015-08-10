@@ -164,6 +164,8 @@ public class PreviewPanel extends JPanel implements ActionListener {
 		g2d.scale(2, 2);
 		g2d.translate(body.getWidth(), body.getHeight());
 		
+		g2d.drawImage(body, 0, 0, null);
+		
 		if(data != null) {
 			AnimateData back_fx_date = data.getBackFxAnimateData();
 			if(back_fx_date != null && (running || selected_layer_index == 0)) {
@@ -187,7 +189,7 @@ public class PreviewPanel extends JPanel implements ActionListener {
 				g2d.setComposite(AlphaComposite.SrcOver);
 			}
 			
-			AnimateData font_fx_date = data.getBackFxAnimateData();
+			AnimateData font_fx_date = data.getFrontFxAnimateData();
 			if(font_fx_date != null && (running || selected_layer_index == 2)) {
 				g2d.drawImage(
 				font_fx_date.getFrames()[frame_count], 
@@ -195,8 +197,6 @@ public class PreviewPanel extends JPanel implements ActionListener {
 				null);
 			}
 		}
-		
-		g2d.drawImage(body, 0, 0, null);
 		
 		g2d.setColor(Color.RED);
 		g2d.fillRect(BODY_ANCHOR_X, BODY_ANCHOR_Y, 1, 1);

@@ -16,36 +16,55 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import panel.QuickButton;
 import panel.weapon.core.AnimateData;
 import panel.weapon.core.WeaponData;
-import panel.weapon.gui.WeaponPanel;
 import frame.gui.window.MainFrame;
-import frame.gui.window.StandaloneFrame;;
+import frame.gui.window.StandaloneFrame;
 
 @SuppressWarnings("serial")
-public class FrameCountDialog extends JDialog{
+public class WeaponDataImportDialog extends JDialog{
 	private int frame_count = 1;
-	public int getFrameCount() {
-		return frame_count;
-	}
 	
-	public FrameCountDialog(final File WeaponFile) throws IOException {
+	private BufferedImage back_fx_image = null;
+	private BufferedImage weapon_image;
+	private BufferedImage front_fx_image = null;
+	
+	public WeaponDataImportDialog(final File weapon_file) throws IOException {
 		super(MainFrame.getInstance(), "帧数设置", true);
+		
+		String file_name_path = weapon_file.getName();
+		file_name_path = weapon_file.getParent() + "/" + file_name_path.substring(0, file_name_path.length() - 4);
 		
 		JPanel preview_panel = new JPanel();
 		preview_panel.setLayout(new GridLayout(3, 1, 8, 8));
 		
-		BufferedImage weapon_image = ImageIO.read(WeaponFile);
-		
-		final SplitPreviewPanel back_fx = new SplitPreviewPanel("后特效", null, frame_count);
+		final SplitPreviewPanel back_fx;
+		File back_fx_file = new File(file_name_path + ".fx.back.png");
+		if(back_fx_file != null && back_fx_file.exists()) {
+			back_fx_image = ImageIO.read(back_fx_file);
+			back_fx = new SplitPreviewPanel("后特效", back_fx_image, frame_count);
+		} else {
+			back_fx = new SplitPreviewPanel("后特效", null, frame_count);
+		}
 		preview_panel.add(back_fx);
+		
+		weapon_image = ImageIO.read(weapon_file);
 		final SplitPreviewPanel weapon = new SplitPreviewPanel("武器", weapon_image, frame_count);
 		preview_panel.add(weapon);
-		final SplitPreviewPanel front_fx = new SplitPreviewPanel("前特效", null, frame_count);
+		
+		final SplitPreviewPanel front_fx;
+		File front_fx_file = new File(file_name_path + ".fx.front.png");
+		if(front_fx_file != null && front_fx_file.exists()) {
+			front_fx_image = ImageIO.read(front_fx_file);
+			front_fx = new SplitPreviewPanel("前特效", front_fx_image, frame_count);
+		} else {
+			front_fx = new SplitPreviewPanel("前特效", null, frame_count);
+		}
 		preview_panel.add(front_fx);
 		
 		setLayout(new BorderLayout());
@@ -100,12 +119,13 @@ public class FrameCountDialog extends JDialog{
 		choice_panel.add(new QuickButton("确定") {
 			@Override
 			public void OnClick() {
-				try {
-					WeaponPanel.setSharedWeaponData(new WeaponData(new AnimateData(WeaponFile, getFrameCount()), null, null));
-				} catch (IOException e) {
+				//try {
+				//	WeaponPanel.setSharedWeaponData(new WeaponData(new AnimateData(WeaponFile, getFrameCount()), null, null));
+				//} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				//	e.printStackTrace();
+				//}
+				action_id = JFileChooser.APPROVE_OPTION;
 				dispose();
 			}
 		}, gbc);
@@ -115,6 +135,38 @@ public class FrameCountDialog extends JDialog{
 		
 		pack();
 		MakeCenter();
+	}
+	
+	private int action_id;
+	public int showImportDialog() {
+		action_id = JFileChooser.CANCEL_OPTION;
+		setVisible(true);
+		while(isVisible()) {
+			//阻塞线程
+		}
+		return action_id;
+	}
+	
+	public WeaponData getWeaponData() {
+		try {
+			AnimateData weapon_data = new AnimateData(weapon_image, frame_count);
+			
+			AnimateData back_fx_data = null;
+			if(back_fx_image != null) {
+				back_fx_data = new AnimateData(back_fx_image, frame_count);
+			}
+			
+			AnimateData front_fx_data = null;
+			if(front_fx_image != null) {
+				front_fx_data = new AnimateData(front_fx_image, frame_count);
+			}
+			
+			return new WeaponData(weapon_data, back_fx_data, front_fx_data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void MakeCenter() {

@@ -52,19 +52,14 @@ public class AnimateData implements JSONString{
 			x_offset[i] = x_array.getInt(i);
 			y_offset[i] = y_array.getInt(i);
 		}
-		
-		
-		/*
-		File data_file = new File(png_file.getParent() + "/" + png_file.getName().substring(0, png_file.getName().length() - 4) + ".data");
-		if(!data_file.exists()) {
-			
-		}
-		*/
 	}
 	
 	public AnimateData(File png_file, int frame_count) throws IOException {
+		this(ImageIO.read(png_file), frame_count);
+	}
+	
+	public AnimateData(BufferedImage frame_list, int frame_count) throws IOException {
 		this.frame_count = frame_count;
-		BufferedImage frame_list = ImageIO.read(png_file);
 		if(frame_list.getWidth() % frame_count != 0) {
 			throw new IOException("图像的宽度不是" + frame_count + "的倍数");
 		}

@@ -5,10 +5,10 @@ import java.awt.KeyboardFocusManager;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import panel.CommonData;
+import panel.QuickButton;
 import panel.weapon.core.WeaponData;
 
 @SuppressWarnings("serial")
@@ -35,11 +35,13 @@ public class WeaponPanel extends JPanel{
 		}
 	}
 	
-	private JButton open_button;
-	private JButton save_button;
+	private QuickButton open_button;
+	private QuickButton modify_button;
+	private QuickButton save_button;
+	
 	private WeaponPanel() {
 		try {
-			setSharedWeaponData(new WeaponData(new File(CommonData.CURRENT_PATH + "/res/avatar/weapon/1°Ñµ¶.png")));
+			setSharedWeaponData(WeaponData.importFrom(new File(CommonData.CURRENT_PATH + "/res/avatar/weapon/1°Ñµ¶.png")));
 			//setSharedWeaponData(null);
 		} catch (IOException e) {
 			//TODO Auto-generated catch block
@@ -57,9 +59,11 @@ public class WeaponPanel extends JPanel{
 		menu_panel.setLayout(new BorderLayout());
 		open_button = new OpenButton();
 		menu_panel.add(open_button, BorderLayout.WEST);
+		modify_button = new ModifyButton();
+		menu_panel.add(modify_button, BorderLayout.CENTER);
 		save_button = new SaveButton();
 		menu_panel.add(save_button, BorderLayout.EAST);
 		save_button.setEnabled(getSharedWeaponData() != null);
 		add(menu_panel, BorderLayout.SOUTH);
-	} 
+	}
 }
