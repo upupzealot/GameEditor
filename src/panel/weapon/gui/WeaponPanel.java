@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import panel.CommonData;
 import panel.QuickButton;
@@ -26,29 +27,26 @@ public class WeaponPanel extends JPanel{
 		return SharedWeaponData;
 	}
 	
-	public static void setSharedWeaponData(WeaponData data) {
+	public void setSharedWeaponData(WeaponData data) {
 		SharedWeaponData = data;
 		FrameSelectPanel.getInstance().SetWeaponData(data);
 		PreviewPanel.getInstance().SetWeaponData(data);
-		if(instance != null) {
-			instance.save_button.setEnabled(data != null);
-		}
+		
+		save_button.setEnabled(data != null);
+		modify_button.setEnabled(data != null);
+	}
+	
+	static File current_file = null;
+	public File getCurrentFile() {
+		return current_file;
 	}
 	
 	private QuickButton open_button;
 	private QuickButton modify_button;
 	private QuickButton save_button;
-	
 	private WeaponPanel() {
-		try {
-			setSharedWeaponData(WeaponData.importFrom(new File(CommonData.CURRENT_PATH + "/res/avatar/weapon/1°Ñµ¶.png")));
-			//setSharedWeaponData(null);
-		} catch (IOException e) {
-			//TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		setLayout(new BorderLayout());
+		setBorder(new EmptyBorder(2, 2, 2, 2));
 		add(FrameSelectPanel.getInstance(), BorderLayout.NORTH);
 		add(PreviewPanel.getInstance(), BorderLayout.CENTER);
 
@@ -56,7 +54,7 @@ public class WeaponPanel extends JPanel{
 		manager.addKeyEventPostProcessor(PreviewPanel.getInstance().getKeyEventPostProcessor());
 		
 		JPanel menu_panel = new JPanel();
-		menu_panel.setLayout(new BorderLayout());
+		menu_panel.setLayout(new BorderLayout(4, 4));
 		open_button = new OpenButton();
 		menu_panel.add(open_button, BorderLayout.WEST);
 		modify_button = new ModifyButton();
@@ -65,5 +63,16 @@ public class WeaponPanel extends JPanel{
 		menu_panel.add(save_button, BorderLayout.EAST);
 		save_button.setEnabled(getSharedWeaponData() != null);
 		add(menu_panel, BorderLayout.SOUTH);
+		
+		try {
+			File weapon_file = new File(CommonData.CURRENT_PATH + "/res/avatar/weapon/1°Ñµ¶.png");
+			setSharedWeaponData(WeaponData.importFrom(new File(CommonData.CURRENT_PATH + "/res/avatar/weapon/1°Ñµ¶.png")));
+			current_file = weapon_file;
+		} catch (IOException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//setSharedWeaponData(null);
 	}
 }

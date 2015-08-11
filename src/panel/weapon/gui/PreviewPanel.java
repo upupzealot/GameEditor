@@ -103,8 +103,8 @@ public class PreviewPanel extends JPanel implements ActionListener {
 	}
 	
 	public void SetWeaponData(WeaponData data) {
-		back_fx_button.setEnabled(data.getBackFxAnimateData() != null);
-		front_fx_button.setEnabled(data.getFrontFxAnimateData() != null);
+		back_fx_button.setEnabled(data != null && data.getBackFxAnimateData() != null);
+		front_fx_button.setEnabled(data != null && data.getFrontFxAnimateData() != null);
 	}
 	
 	private boolean running = false;

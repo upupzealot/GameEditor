@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import panel.QuickButton;
 import panel.weapon.core.AnimateData;
 import panel.weapon.core.WeaponData;
+import frame.core.io.PngSaver;
 import frame.gui.window.MainFrame;
 import frame.gui.window.StandaloneFrame;
 
@@ -30,44 +31,48 @@ import frame.gui.window.StandaloneFrame;
 public class WeaponDataImportDialog extends JDialog{
 	private int frame_count = 1;
 	
-	private BufferedImage back_fx_image = null;
+	private File back_fx_file = null;
+	
+	private File weapon_file;
 	private BufferedImage weapon_image;
-	private BufferedImage front_fx_image = null;
+	
+	private File front_fx_file = null;
 	
 	public WeaponDataImportDialog(final File weapon_file) throws IOException {
 		super(MainFrame.getInstance(), "帧数设置", true);
 		
+		weapon_image = ImageIO.read(weapon_file);
+		this.weapon_file = weapon_file;
 		String file_name_path = weapon_file.getName();
 		file_name_path = weapon_file.getParent() + "/" + file_name_path.substring(0, file_name_path.length() - 4);
+		back_fx_file = new File(file_name_path + ".fx.back.png");
+		front_fx_file = new File(file_name_path + ".fx.front.png");
+	}
+	
+	private SplitPreviewPanel back_fx;
+	private SplitPreviewPanel weapon;
+	private SplitPreviewPanel front_fx;
+	
+	private void initPreviewPanels(boolean can_modify) throws IOException {
+		back_fx = new SplitPreviewPanel("后特效", back_fx_file, frame_count, can_modify);
+		
+		weapon = new SplitPreviewPanel("武器", weapon_file, frame_count, false);
+		
+		front_fx = new SplitPreviewPanel("前特效", front_fx_file, frame_count, can_modify);
+	}
+	
+	private void Layout(boolean can_modify) throws IOException {
+		initPreviewPanels(can_modify);
+		
+		setLayout(new BorderLayout());
 		
 		JPanel preview_panel = new JPanel();
 		preview_panel.setLayout(new GridLayout(3, 1, 8, 8));
 		
-		final SplitPreviewPanel back_fx;
-		File back_fx_file = new File(file_name_path + ".fx.back.png");
-		if(back_fx_file != null && back_fx_file.exists()) {
-			back_fx_image = ImageIO.read(back_fx_file);
-			back_fx = new SplitPreviewPanel("后特效", back_fx_image, frame_count);
-		} else {
-			back_fx = new SplitPreviewPanel("后特效", null, frame_count);
-		}
 		preview_panel.add(back_fx);
-		
-		weapon_image = ImageIO.read(weapon_file);
-		final SplitPreviewPanel weapon = new SplitPreviewPanel("武器", weapon_image, frame_count);
 		preview_panel.add(weapon);
-		
-		final SplitPreviewPanel front_fx;
-		File front_fx_file = new File(file_name_path + ".fx.front.png");
-		if(front_fx_file != null && front_fx_file.exists()) {
-			front_fx_image = ImageIO.read(front_fx_file);
-			front_fx = new SplitPreviewPanel("前特效", front_fx_image, frame_count);
-		} else {
-			front_fx = new SplitPreviewPanel("前特效", null, frame_count);
-		}
 		preview_panel.add(front_fx);
 		
-		setLayout(new BorderLayout());
 		add(preview_panel, BorderLayout.CENTER);
 		
 		JPanel choice_panel = new JPanel();
@@ -119,13 +124,13 @@ public class WeaponDataImportDialog extends JDialog{
 		choice_panel.add(new QuickButton("确定") {
 			@Override
 			public void OnClick() {
-				//try {
-				//	WeaponPanel.setSharedWeaponData(new WeaponData(new AnimateData(WeaponFile, getFrameCount()), null, null));
-				//} catch (IOException e) {
-					// TODO Auto-generated catch block
-				//	e.printStackTrace();
-				//}
 				action_id = JFileChooser.APPROVE_OPTION;
+				if(!back_fx.getWorkingFile().equals(back_fx_file)) {
+					PngSaver.SaveImage(back_fx.getImage(), back_fx_file);
+				}
+				if(!front_fx.getWorkingFile().equals(front_fx_file)) {
+					PngSaver.SaveImage(front_fx.getImage(), front_fx_file);
+				}
 				dispose();
 			}
 		}, gbc);
@@ -138,12 +143,21 @@ public class WeaponDataImportDialog extends JDialog{
 	}
 	
 	private int action_id;
-	public int showImportDialog() {
+	public int showImportDialog() throws IOException {
+		Layout(false);
+		
 		action_id = JFileChooser.CANCEL_OPTION;
 		setVisible(true);
-		while(isVisible()) {
-			//阻塞线程
-		}
+		return action_id;
+	}
+	
+	public int showModifyDialog() throws IOException {
+		Layout(true);
+		
+		action_id = JFileChooser.CANCEL_OPTION;
+		pack();
+		setMinimumSize(getSize());
+		setVisible(true);
 		return action_id;
 	}
 	
@@ -152,13 +166,13 @@ public class WeaponDataImportDialog extends JDialog{
 			AnimateData weapon_data = new AnimateData(weapon_image, frame_count);
 			
 			AnimateData back_fx_data = null;
-			if(back_fx_image != null) {
-				back_fx_data = new AnimateData(back_fx_image, frame_count);
+			if(back_fx.getImage() != null) {
+				back_fx_data = new AnimateData(back_fx.getImage(), frame_count);
 			}
 			
 			AnimateData front_fx_data = null;
-			if(front_fx_image != null) {
-				front_fx_data = new AnimateData(front_fx_image, frame_count);
+			if(front_fx.getImage() != null) {
+				front_fx_data = new AnimateData(front_fx.getImage(), frame_count);
 			}
 			
 			return new WeaponData(weapon_data, back_fx_data, front_fx_data);
